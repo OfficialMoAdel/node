@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000
 
 app.get("/", (req, res) => {
- const massage = `Hello from ${os.hostname()}: version 1.2.0`
+ const massage = `Hello from ${os.hostname()}`
  res.send(massage)
 })
 app.listen(PORT, () => {
