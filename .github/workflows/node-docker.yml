@@ -26,18 +26,3 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-node-app:latest
           platforms: linux/amd64,linux/arm64
-
-  update-description:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Update Docker Hub Description
-        uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }} # Same PAT here :contentReference[oaicite:6]{index=6}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/my-node-app # Your own repo slug :contentReference[oaicite:7]{index=7}
-          short-description: "My Node.js application"
-          readme-filepath: ./README.md
