@@ -23,10 +23,10 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/my-node-app:latest
           platforms: linux/amd64,linux/arm64 # Specify the platforms you want to build for
       - name: Update Docker Hub Description
-        uses: peter-evans/dockerhub-description@v4 # Updated to v4
+        uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_PASSWORD }} # Must be a PAT, not your Docker Hub password
           repository: ${{ secrets.DOCKER_USERNAME }}/my-node-app
           short-description: "My Node.js application"
           readme-filepath: ./README.md
