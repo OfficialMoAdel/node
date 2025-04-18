@@ -25,5 +25,16 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true # Set to true if you want to push to a registry
+          push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/my-node-app:latest
+          platforms: linux/amd64,linux/arm64
+
+      # Add these steps to update Docker Hub README
+      - name: Update Docker Hub README
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_USERNAME }}/my-node-app
+          short-description: "This is my Node.js application running in Docker."
+          readme-filepath: ./README.md
