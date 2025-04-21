@@ -33,5 +33,4 @@ jobs:
         with:
           destination_container_repo: ${{ secrets.DOCKERHUB_USERNAME }}/my-node-app
           provider: dockerhub
-          short_description: ${{ github.event.repository.description }}
           readme_file: "README.md"
