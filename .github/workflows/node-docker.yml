@@ -47,4 +47,4 @@ jobs:
           # Construct the destination repo name using env vars
           destination_container_repo: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           provider: dockerhub
-          readme_file: "README.md" # Make sure README.md exists at the root
+          readme_file: "README.md" # Make sure README.md exists at the root of your repo
