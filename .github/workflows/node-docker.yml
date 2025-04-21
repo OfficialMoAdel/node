@@ -31,6 +31,6 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
         with:
-          destination_container_repo: ${{ secrets.DOCKERHUB_USERNAME }}/my-node-app
+          destination_container_repo: officialmoadel/my-node-app
           provider: dockerhub
           readme_file: "README.md"
