@@ -1,12 +1,21 @@
 name: Node.js Docker Build & Docker Hub Description
+
 on:
   push:
     branches: [main]
+
+# Define environment variables for easy reuse and consistency
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }} # Ensure this secret is set to 'officialmoadel'
+  IMAGE_NAME: my-node-app # Your application's image name
+  IMAGE_TAG: 1.5.0 # Or use dynamic tagging like ${{ github.sha }}
+
 jobs:
-  build:
+  build-and-push: # Renamed job for clarity
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -14,23 +23,28 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }} # Use a PAT here
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-node-app:1.5.0
+          # Construct the full image tag using env vars
+          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}, ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest # Optionally push latest tag too
           platforms: linux/amd64,linux/arm64
+          cache-from: type=gha # Optional: enable build cache
+          cache-to: type=gha,mode=max # Optional: enable build cache
 
       - name: Update Docker Hub Description
         uses: christian-korneck/update-container-description-action@v1
+        # Environment variables specific to this step
         env:
-          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKER_USER: ${{ env.DOCKERHUB_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }} # Use the same PAT
         with:
-          destination_container_repo: officialmoadel/my-node-app
+          # Construct the destination repo name using env vars
+          destination_container_repo: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           provider: dockerhub
-          readme_file: "README.md"
+          readme_file: "README.md" # Make sure README.md exists at the root
